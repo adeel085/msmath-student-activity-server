@@ -5,16 +5,16 @@ const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on("connection", (ws, req) => {
     const parameters = url.parse(req.url, true).query;
-    const schoolName = parameters.school_name;
+    const appId = parameters.app_id;
 
-    ws.schoolName = schoolName;
+    ws.appId = appId;
 
     ws.on("message", (message) => {
         // Broadcast the message to all connected clients
         wss.clients.forEach((client) => {
             if (
                 client !== ws &&
-                client.schoolName === ws.schoolName &&
+                client.appId === ws.appId &&
                 client.readyState === WebSocket.OPEN
             ) {
                 client.send(message);
